@@ -1,0 +1,137 @@
+package library;
+
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class User {
+
+    public JFrame frame;
+    private JTable table;
+    private JTextField textField;
+    private JTextField textField_1;
+    private JPasswordField passwordField;
+    private DefaultTableModel tableModel;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    User window = new User();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the application.
+     */
+    public User() {
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+        
+        tableModel = new DefaultTableModel(new Object[]{"ID", "Email", "Username", "Password"}, 0);
+        table = new JTable(tableModel);
+        table.setBounds(166, 22, 247, 228);
+        frame.getContentPane().add(table);
+        
+        JButton btnNewButton = new JButton("<");
+        btnNewButton.setBounds(0, 11, 41, 23);
+        frame.getContentPane().add(btnNewButton);
+        
+        JButton btnNewButton_1 = new JButton("Add User");
+        btnNewButton_1.setBounds(66, 186, 89, 23);
+        frame.getContentPane().add(btnNewButton_1);
+        
+        JLabel lblNewLabel = new JLabel("Add User");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel.setBounds(43, 45, 64, 14);
+        frame.getContentPane().add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("View Details");
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel_1.setBounds(242, 0, 81, 23);
+        frame.getContentPane().add(lblNewLabel_1);
+        
+        JLabel lblNewLabel_2 = new JLabel("Email:");
+        lblNewLabel_2.setBounds(10, 70, 46, 14);
+        frame.getContentPane().add(lblNewLabel_2);
+        
+        JLabel lblNewLabel_3 = new JLabel("Username");
+        lblNewLabel_3.setBounds(10, 106, 56, 14);
+        frame.getContentPane().add(lblNewLabel_3);
+        
+        JLabel lblNewLabel_3_1 = new JLabel("Password");
+        lblNewLabel_3_1.setBounds(10, 142, 46, 14);
+        frame.getContentPane().add(lblNewLabel_3_1);
+        
+        textField = new JTextField();
+        textField.setBounds(66, 67, 89, 20);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+        
+        textField_1 = new JTextField();
+        textField_1.setColumns(10);
+        textField_1.setBounds(66, 103, 89, 20);
+        frame.getContentPane().add(textField_1);
+        
+        passwordField = new JPasswordField();
+        passwordField.setBounds(66, 139, 89, 20);
+        frame.getContentPane().add(passwordField);
+
+        btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String email = textField.getText();
+                String username = textField_1.getText();
+                String password = new String(passwordField.getPassword());
+
+                DatabaseHelper db = new DatabaseHelper();
+                db.addUser(email, username, password);
+                loadUserData();
+            }
+        });
+
+        loadUserData();
+    }
+
+    private void loadUserData() {
+        tableModel.setRowCount(0); // Clear existing data
+        DatabaseHelper db = new DatabaseHelper();
+        try (Connection conn = db.connect();
+             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users");
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{rs.getInt("id"), rs.getString("email"), rs.getString("username"), rs.getString("password")});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,135 @@
+package library;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
+import library.User;
+
+
+
+public class loginpage {
+
+	public JFrame frame;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JPasswordField passwordField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					loginpage window = new loginpage();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public loginpage() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+	    frame = new JFrame();
+	    frame.setBounds(100, 100, 450, 300);
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.getContentPane().setLayout(null);
+	    
+	    JLabel lblNewLabel = new JLabel("LOGIN");
+	    lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 29));
+	    lblNewLabel.setBounds(142, 11, 115, 34);
+	    frame.getContentPane().add(lblNewLabel);
+	    
+	    JLabel lblNewLabel_1 = new JLabel("Enter your registered Email, Username, and Password:");
+	    lblNewLabel_1.setBounds(25, 62, 297, 29);
+	    frame.getContentPane().add(lblNewLabel_1);
+	    
+	    JLabel lblNewLabel_1_1 = new JLabel("Email:");
+	    lblNewLabel_1_1.setBounds(25, 102, 46, 14);
+	    frame.getContentPane().add(lblNewLabel_1_1);
+	    
+	    JLabel lblNewLabel_1_2 = new JLabel("Username:");
+	    lblNewLabel_1_2.setBounds(25, 137, 63, 14);
+	    frame.getContentPane().add(lblNewLabel_1_2);
+	    
+	    JLabel lblNewLabel_1_2_1 = new JLabel("Password:");
+	    lblNewLabel_1_2_1.setBounds(25, 178, 63, 14);
+	    frame.getContentPane().add(lblNewLabel_1_2_1);
+	    
+	    textField = new JTextField();
+	    textField.setBounds(107, 99, 240, 20);
+	    frame.getContentPane().add(textField);
+	    textField.setColumns(10);
+	    
+	    textField_1 = new JTextField();
+	    textField_1.setColumns(10);
+	    textField_1.setBounds(107, 134, 240, 20);
+	    frame.getContentPane().add(textField_1);
+	    
+	    passwordField = new JPasswordField();
+	    passwordField.setBounds(107, 175, 240, 20);
+	    frame.getContentPane().add(passwordField);
+	    
+	    JButton btnNewButton = new JButton("Login");
+	    btnNewButton.setBounds(258, 213, 89, 23);
+	    frame.getContentPane().add(btnNewButton);
+	    
+	    // Action listener for the login button
+	    btnNewButton.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            // Get input values
+	            String email = textField.getText();
+	            String username = textField_1.getText();
+	            String password = new String(passwordField.getPassword());
+	         
+	            // Check if the input matches admin credentials
+	            if (email.equals("admin@gmail.com") && username.equals("admin") && password.equals("admin")) {
+	                // Open admin page if credentials match
+	                frame.dispose(); // Close login page
+	                admin window = new admin();
+					window.frame.setVisible(true);
+	                //new admin(); // Open admin page
+	            } 
+	            else {
+	                // Show error message or handle invalid login
+	                // For example:
+	                JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.");
+	            }
+	            
+	         // Check if the input matches any user credentials in the list
+                for (String[] userDetails : library.User.userList) {
+                    if (userDetails[0].equals(email) && userDetails[1].equals(username) && userDetails[2].equals(password)) {
+                        // Open user page if user credentials match
+                        frame.dispose(); // Close login page
+                        userpage window = new userpage();
+    					window.frame.setVisible(true);
+                        return;
+                    } else {
+    	                // Show error message or handle invalid login
+    	                // For example:
+    	                JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.");
+    	            }
+                }
+	        }
+	    });
+	}
+}

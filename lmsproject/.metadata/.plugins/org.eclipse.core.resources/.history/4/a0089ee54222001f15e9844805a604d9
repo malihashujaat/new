@@ -1,0 +1,149 @@
+package library;
+import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Book {
+
+    public JFrame frame;
+    private JTable table;
+    private JTextField textFieldBookName;
+    private JTextField textFieldGenre;
+    private JTextField textFieldPrice;
+
+    private DefaultTableModel tableModel;
+    public static List<String[]> bookList; // Change to List<String[]>
+
+    // Counter for generating unique book IDs
+    private static int bookIdCounter = 1;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Book window = new Book();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the application.
+     */
+    public Book() {
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    public void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        bookList = new ArrayList<>(); // Initialize bookList
+
+        // Table model with column headers
+        tableModel = new DefaultTableModel(new Object[]{"Book ID", "Book Name", "Genre", "Price"}, 0);
+        table = new JTable(tableModel);
+        table.setBounds(173, 25, 251, 225);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(173, 25, 251, 225);
+        frame.getContentPane().add(scrollPane);
+
+        JButton btnBack = new JButton("<");
+        btnBack.setBounds(10, 7, 46, 23);
+        frame.getContentPane().add(btnBack);
+        btnBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                admin window = new admin();
+                window.frame.setVisible(true);
+            }
+        });
+
+        JButton btnAddBook = new JButton("Add Book");
+        btnAddBook.setBounds(74, 160, 89, 23);
+        frame.getContentPane().add(btnAddBook);
+        
+        JLabel lblBookDetails = new JLabel("Book Details");
+		lblBookDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblBookDetails.setBounds(267, 9, 89, 14);
+		frame.getContentPane().add(lblBookDetails);
+		
+
+        JLabel lblNewLabel = new JLabel("Add Book");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel.setBounds(58, 38, 73, 14);
+        frame.getContentPane().add(lblNewLabel);
+
+        JLabel lblBookName = new JLabel("Book Name:");
+        lblBookName.setBounds(10, 67, 73, 14);
+        frame.getContentPane().add(lblBookName);
+
+        JLabel lblGenre = new JLabel("Genre:");
+        lblGenre.setBounds(10, 95, 46, 14);
+        frame.getContentPane().add(lblGenre);
+
+        JLabel lblPrice = new JLabel("Price:");
+        lblPrice.setBounds(10, 130, 46, 14);
+        frame.getContentPane().add(lblPrice);
+
+        // Action listener for the "Add Book" button
+        btnAddBook.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String bookName = textFieldBookName.getText();
+                String genre = textFieldGenre.getText();
+                String price = textFieldPrice.getText();
+
+                // Generate unique book ID
+                String bookId = "B" + bookIdCounter++;
+                
+                // Add book details to the list
+                String[] bookDetails = {bookId, bookName, genre, price};
+                bookList.add(bookDetails);
+
+                // Add book details to the table model
+                tableModel.addRow(new Object[]{bookId, bookName, genre, price});
+
+                // Clear the text fields after adding the book
+                textFieldBookName.setText("");
+                textFieldGenre.setText("");
+                textFieldPrice.setText("");
+            }
+        });
+
+        textFieldBookName = new JTextField();
+        textFieldBookName.setBounds(74, 64, 86, 20);
+        frame.getContentPane().add(textFieldBookName);
+        textFieldBookName.setColumns(10);
+
+        textFieldGenre = new JTextField();
+        textFieldGenre.setBounds(74, 92, 86, 20);
+        frame.getContentPane().add(textFieldGenre);
+        textFieldGenre.setColumns(10);
+
+        textFieldPrice = new JTextField();
+        textFieldPrice.setBounds(74, 127, 86, 20);
+        frame.getContentPane().add(textFieldPrice);
+        textFieldPrice.setColumns(10);
+    }
+}

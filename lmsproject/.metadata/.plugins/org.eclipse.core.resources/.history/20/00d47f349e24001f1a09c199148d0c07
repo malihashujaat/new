@@ -1,0 +1,25 @@
+package library;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class loginpageTest {
+
+    private loginpage login;
+
+    @BeforeEach
+    public void setUp() {
+        login = new loginpage();
+    }
+
+    @Test
+    public void testAuthenticateUserValidCredentials() {
+        assertTrue(login.authenticateUser("admin", "admin123"));
+    }
+
+    @Test
+    public void testAuthenticateUserInvalidCredentials() {
+        assertFalse(login.authenticateUser("admin", "wrongpassword"));
+    }
+}

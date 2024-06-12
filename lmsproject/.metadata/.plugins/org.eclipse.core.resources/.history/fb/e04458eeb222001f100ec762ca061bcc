@@ -1,0 +1,210 @@
+package library;
+import java.awt.EventQueue;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class User {
+    public JFrame frame;
+    private JTable table;
+    private JTextField textField;
+    private JTextField textField_1;
+    private JTextField textField_2; // Declare textField_2
+    private JPasswordField passwordField;
+    private DefaultTableModel tableModel;
+    public static List<String[]> userList;
+    private static final String USER_DATA_FILE = "users.dat";
+
+    /** * Launch the application. */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    User window = new User();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /** * Create the application. */
+    public User() {
+        loadUserData(); // Load user data from file at the beginning
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    public void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 500, 350);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        loadUserData(); // Load user data from file at the beginning
+
+        // Table model with column headers
+        tableModel = new DefaultTableModel(new Object[]{"User ID", "Email", "Username", "Password"}, 0);
+        table = new JTable(tableModel);
+        table.setBounds(166, 22, 300, 228);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(166, 22, 300, 228);
+        frame.getContentPane().add(scrollPane);
+
+        JButton btnNewButton = new JButton("<");
+        btnNewButton.setBounds(10, 11, 41, 23);
+        frame.getContentPane().add(btnNewButton);
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                admin window = new admin();
+                window.frame.setVisible(true);
+            }
+        });
+
+        JButton btnNewButton_1 = new JButton("Add User");
+        btnNewButton_1.setBounds(66, 186, 89, 23);
+        frame.getContentPane().add(btnNewButton_1);
+
+        JLabel lblNewLabel = new JLabel("Add User");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel.setBounds(43, 45, 64, 14);
+        frame.getContentPane().add(lblNewLabel);
+
+        JLabel lblNewLabel_1 = new JLabel("View Details");
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel_1.setBounds(242, 0, 81, 23);
+        frame.getContentPane().add(lblNewLabel_1);
+
+        JLabel lblNewLabel_2 = new JLabel("Email:");
+        lblNewLabel_2.setBounds(10, 70, 46, 14);
+        frame.getContentPane().add(lblNewLabel_2);
+
+        JLabel lblNewLabel_3 = new JLabel("Username");
+        lblNewLabel_3.setBounds(10, 106, 56, 14);
+        frame.getContentPane().add(lblNewLabel_3);
+
+        JLabel lblNewLabel_3_1 = new JLabel("Password");
+        lblNewLabel_3_1.setBounds(10, 142, 46, 14);
+        frame.getContentPane().add(lblNewLabel_3_1);
+
+        JLabel lblNewLabel_4 = new JLabel("User ID:");
+        lblNewLabel_4.setBounds(10, 174, 56, 14);
+        frame.getContentPane().add(lblNewLabel_4);
+
+        textField = new JTextField();
+        textField.setBounds(66, 67, 89, 20);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+
+        textField_1 = new JTextField();
+        textField_1.setColumns(10);
+        textField_1.setBounds(66, 103, 89, 20);
+        frame.getContentPane().add(textField_1);
+
+        textField_2 = new JTextField(); // Initialize textField_2
+        textField_2.setColumns(10);
+        textField_2.setBounds(66, 171, 89, 20);
+        frame.getContentPane().add(textField_2);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(66, 139, 89, 20);
+        frame.getContentPane().add(passwordField);
+
+        // Action listener for the "Add User" button
+        btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String email = textField.getText();
+                String username = textField_1.getText();
+                String password = new String(passwordField.getPassword());
+                String userId = textField_2.getText(); // Get the manually entered user ID
+
+                // Add user details to the list
+                String[] userDetails = {email, username, password, userId}; // Include userId in userDetails
+                userList.add(userDetails);
+
+                // Add user details to the table model
+                tableModel.addRow(new Object[]{userId, email, username, password}); // Use userId instead of userList.size()
+
+                // Save user data to file
+                saveUserData();
+
+                // Clear the text fields after adding the user
+                textField.setText("");
+                textField_1.setText("");
+                passwordField.setText("");
+                textField_2.setText(""); // Clear the user ID field
+            }
+        });
+        textField = new JTextField();
+        textField.setBounds(66, 67, 89, 20);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+
+        textField_1 = new JTextField();
+        textField_1.setColumns(10);
+        textField_1.setBounds(66, 103, 89, 20);
+        frame.getContentPane().add(textField_1);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(66, 139, 89, 20);
+        frame.getContentPane().add(passwordField);
+
+     // Action listener for the "Add User" button
+        btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String email = textField.getText();
+                String username = textField_1.getText();
+                String password = new String(passwordField.getPassword());
+
+                // Add user details to the list
+                String[] userDetails = {email, username, password};
+                userList.add(userDetails);
+
+                // Add user details to the table model
+                tableModel.addRow(new Object[]{userList.size(), email, username, password});
+
+                // Save user data to file
+                saveUserData();
+
+                // Clear the text fields after adding the user
+                textField.setText("");
+                textField_1.setText("");
+                passwordField.setText("");
+            }
+        });
+
+        for (int i = 0; i < userList.size(); i++) {
+            String[] user = userList.get(i);
+            tableModel.addRow(new Object[]{i + 1, user[0], user[1], user[2]});
+        }
+    }
+
+
+
+    // Save user data to file
+    private void saveUserData() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(USER_DATA_FILE))) {
+            out.writeObject(userList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load user data from file
+    private void loadUserData() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(USER_DATA_FILE))) {
+            userList = (List<String[]>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            userList = new ArrayList<>();
+        }
+    }
+}

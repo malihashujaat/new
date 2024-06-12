@@ -1,0 +1,133 @@
+package library;
+
+import java.awt.EventQueue;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Returnbook {
+
+    public JFrame frame;
+    private JTextField textField;
+    private JTextField textField_1;
+    private List<String[]> issueList;
+    private static final String ISSUE_DATA_FILE = "issues.dat";
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Returnbook window = new Returnbook();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the application.
+     */
+    public Returnbook() {
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        loadIssueData(); // Load issue data from file at the beginning
+
+        JLabel lblNewLabel = new JLabel("Return Book");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel.setBounds(169, 11, 89, 21);
+        frame.getContentPane().add(lblNewLabel);
+
+        JButton btnNewButton = new JButton("<");
+        btnNewButton.setBounds(10, 12, 46, 23);
+        frame.getContentPane().add(btnNewButton);
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                admin window = new admin();
+                window.frame.setVisible(true);
+            }
+        });
+
+        JButton btnNewButton_1 = new JButton("Return");
+        btnNewButton_1.setBounds(269, 178, 89, 23);
+        frame.getContentPane().add(btnNewButton_1);
+        btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String bookId = textField.getText();
+                if (isBookIdValid(bookId)) {
+                    JOptionPane.showMessageDialog(frame, "Book returned successfully!");
+                    // You can add additional logic to handle the book return
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Book ID not found. Please enter a valid Book ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        textField = new JTextField();
+        textField.setBounds(126, 86, 124, 20);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+
+        JLabel lblNewLabel_1 = new JLabel("Enter ID of the Book you want to Return");
+        lblNewLabel_1.setBounds(38, 46, 220, 14);
+        frame.getContentPane().add(lblNewLabel_1);
+
+        JLabel lblNewLabel_2 = new JLabel("Book ID");
+        lblNewLabel_2.setBounds(40, 89, 46, 14);
+        frame.getContentPane().add(lblNewLabel_2);
+
+        textField_1 = new JTextField();
+        textField_1.setBounds(126, 117, 124, 20);
+        frame.getContentPane().add(textField_1);
+        textField_1.setColumns(10);
+
+        JLabel lblNewLabel_3 = new JLabel("Date of Return");
+        lblNewLabel_3.setBounds(40, 120, 82, 14);
+        frame.getContentPane().add(lblNewLabel_3);
+    }
+
+    // Load issue data from file
+    private void loadIssueData() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(ISSUE_DATA_FILE))) {
+            issueList = (List<String[]>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            issueList = null;
+        }
+    }
+
+    // Check if the Book ID is valid
+    private boolean isBookIdValid(String bookId) {
+        if (issueList != null) {
+            for (String[] issue : issueList) {
+                if (issue[0].equals(bookId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}

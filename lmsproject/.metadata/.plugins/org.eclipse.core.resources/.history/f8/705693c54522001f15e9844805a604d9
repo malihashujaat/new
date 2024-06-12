@@ -1,0 +1,162 @@
+package library;
+
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+
+public class Issue {
+
+	public JFrame frame;
+	private JTextField textField;
+	private JTextField textField_2;
+    private JTextField textField_3;
+    private JTextField textField_1;
+	private JTable table;
+	
+	 private DefaultTableModel tableModel;
+	 public static List<String[]> issueList;
+	 private static int issueIdCounter = 1;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Issue window = new Issue();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Issue() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 621, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		issueList = new ArrayList<>();
+		
+		JLabel lblNewLabel = new JLabel("Issue Book");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setBounds(74, 15, 89, 20);
+		frame.getContentPane().add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(153, 68, 86, 20);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("What book do you want to issue");
+		lblNewLabel_1.setBounds(20, 46, 250, 14);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Book Name:");
+		lblNewLabel_2.setBounds(20, 71, 80, 14);
+		frame.getContentPane().add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Date of Issue:");
+		lblNewLabel_3.setBounds(20, 99, 80, 14);
+		frame.getContentPane().add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("Date of Return:");
+		lblNewLabel_4.setBounds(20, 129, 89, 14);
+		frame.getContentPane().add(lblNewLabel_4);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(153, 96, 86, 20);
+		frame.getContentPane().add(textField_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(153, 126, 86, 20);
+		frame.getContentPane().add(textField_2);
+		
+		JButton btnNewButton = new JButton("<");
+		btnNewButton.setBounds(10, 11, 41, 23);
+		frame.getContentPane().add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                admin window = new admin();
+				window.frame.setVisible(true);
+              
+            }
+		});
+		
+
+		JButton btnNewButton_1 = new JButton("Issue");
+		btnNewButton_1.setBounds(89, 213, 89, 23);
+		frame.getContentPane().add(btnNewButton_1);
+		btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	String bookName = textField.getText();
+                String IssueDate = textField_1.getText();
+                String ReturnBook = textField_2.getText();
+                String UserID = textField_3.getText();
+                
+                // Generate unique book ID
+                String issueid = "I" + issueIdCounter++;
+                
+                // Add book details to the list
+                String[] bookDetails = {issueid,bookName,IssueDate,ReturnBook,UserID};
+                issueList.add(bookDetails);
+
+                // Add book details to the table model
+                tableModel.addRow(new Object[]{issueid,bookName,IssueDate,ReturnBook,UserID});
+
+                // Clear the text fields after adding the book
+                textField.setText("");
+                textField_1.setText("");
+                textField_2.setText("");
+                textField_3.setText("");
+            }
+        });
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(153, 151, 86, 20);
+		frame.getContentPane().add(textField_3);
+		
+		JLabel lblNewLabel_5 = new JLabel("User ID:");
+		lblNewLabel_5.setBounds(20, 154, 46, 14);
+		frame.getContentPane().add(lblNewLabel_5);
+		
+		tableModel = new DefaultTableModel(new Object[]{"issue ID", "Book Name", "Issue Date", "Return Date", "User ID"}, 0);
+        table = new JTable(tableModel);
+		table.setBounds(297, 20, 281, 230);
+		JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(297, 25, 281, 225);
+        frame.getContentPane().add(scrollPane);
+		
+		
+		JLabel lblAllIssueBook = new JLabel("All Issue Book");
+		lblAllIssueBook.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAllIssueBook.setBounds(383, 0, 149, 20);
+		frame.getContentPane().add(lblAllIssueBook);
+	}
+}

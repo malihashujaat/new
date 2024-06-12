@@ -1,0 +1,112 @@
+package library;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Book {
+
+	public JFrame frame;
+	private JTable table;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Book window = new Book();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Book() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		table = new JTable();
+		table.setBounds(173, 25, 251, 225);
+		frame.getContentPane().add(table);
+		
+		JButton btnNewButton = new JButton("<");
+		btnNewButton.setBounds(10, 7, 46, 23);
+		frame.getContentPane().add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                admin window = new admin();
+				window.frame.setVisible(true);
+              
+            }
+		});
+		
+		JButton btnAddBook = new JButton("Add Book");
+		btnAddBook.setBounds(74, 160, 89, 23);
+		frame.getContentPane().add(btnAddBook);
+		
+		JLabel lblNewLabel = new JLabel("Add Book");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setBounds(58, 38, 73, 14);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JLabel lblBookName = new JLabel("Book Name:");
+		lblBookName.setBounds(10, 67, 57, 14);
+		frame.getContentPane().add(lblBookName);
+		
+		JLabel lblGenere = new JLabel("Genere");
+		lblGenere.setBounds(10, 95, 46, 14);
+		frame.getContentPane().add(lblGenere);
+		
+		JLabel lblPrice = new JLabel("Price");
+		lblPrice.setBounds(10, 130, 46, 14);
+		frame.getContentPane().add(lblPrice);
+		
+		JLabel lblBookDetails = new JLabel("Book Details");
+		lblBookDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblBookDetails.setBounds(267, 9, 89, 14);
+		frame.getContentPane().add(lblBookDetails);
+		
+		textField = new JTextField();
+		textField.setBounds(74, 64, 86, 20);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(74, 92, 86, 20);
+		frame.getContentPane().add(textField_1);
+		textField_1.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(74, 127, 86, 20);
+		frame.getContentPane().add(textField_2);
+		textField_2.setColumns(10);
+	}
+
+}

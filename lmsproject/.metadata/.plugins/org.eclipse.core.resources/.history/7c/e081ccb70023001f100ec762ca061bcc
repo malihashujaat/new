@@ -1,0 +1,92 @@
+package library;
+import library.Issue;
+
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+public class Mybook {
+    public JFrame frame;
+    private JTable table;
+    private DefaultTableModel tableModel;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Mybook window = new Mybook();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the application.
+     */
+    public Mybook() {
+        initialize();
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        JLabel lblNewLabel = new JLabel("My Book");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel.setBounds(172, 7, 85, 19);
+        frame.getContentPane().add(lblNewLabel);
+
+        JLabel lblNewLabel_1 = new JLabel("These are the Book you Issue:");
+        lblNewLabel_1.setBounds(10, 37, 251, 14);
+        frame.getContentPane().add(lblNewLabel_1);
+
+        JButton btnNewButton = new JButton("<");
+        btnNewButton.setBounds(10, 7, 46, 23);
+        frame.getContentPane().add(btnNewButton);
+
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                userpage window = new userpage();
+                window.frame.setVisible(true);
+            }
+        });
+
+        // Fetch the list of issued books from Issue class
+        List<String[]> issueList = Issue.getIssueList();
+
+        // Create table model
+        DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Issue ID", "Book Name", "Issue Date", "Return Date", "User ID"}, 0);
+        JTable table = new JTable(tableModel);
+        table.setBounds(10, 49, 414, 201);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(10, 49, 414, 201);
+        frame.getContentPane().add(scrollPane);
+
+        // Populate the table with issue data
+        if (issueList != null) {
+            for (String[] issue : issueList) {
+                tableModel.addRow(new Object[]{issue[0], issue[1], issue[2], issue[3], issue[4]});
+            }
+        }
+    }}

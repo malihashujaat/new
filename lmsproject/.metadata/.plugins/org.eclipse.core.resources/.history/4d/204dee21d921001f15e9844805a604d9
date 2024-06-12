@@ -1,0 +1,86 @@
+package library;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ViewBook {
+
+	public JFrame frame;
+	private JTable table;
+    
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ViewBook window = new ViewBook();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public ViewBook() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("View Book");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setBounds(152, 11, 104, 19);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("These are the books which is available in Library:");
+		lblNewLabel_1.setBounds(10, 37, 246, 14);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JButton btnNewButton = new JButton("<");
+		btnNewButton.setBounds(10, 7, 46, 23);
+		frame.getContentPane().add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                userpage window = new userpage();
+				window.frame.setVisible(true);
+              
+            }
+		});
+		
+		table = new JTable();
+		table.setBounds(10, 62, 414, 188);
+		frame.getContentPane().add(table);
+	       EventQueue.invokeLater(new Runnable() {
+	           public void run() {
+	               try {
+	            	   ViewBook<String> ViewBook = new ViewBook<>(Book.bookList);
+	               } catch (Exception e) {
+	                   e.printStackTrace();
+	               }
+	           }
+	       });
+	
+	}
+}
